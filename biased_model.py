@@ -39,7 +39,7 @@ dataset = dataset.add_column("labels", correct_dataset['text'].copy())
 del correct_dataset
 torch.cuda.empty_cache()
 gc.collect()
-
+print(dataset)
 
 
 # load tokenizer
@@ -82,7 +82,8 @@ tokenized_dataset = tokenize_function(tokenizer, dataset)
 del dataset
 torch.cuda.empty_cache()
 gc.collect()
-
+print(tokenized_dataset)
+print(tokenized_dataset[0])
 
 # grouping
 print('group text ...')
@@ -179,24 +180,26 @@ def whole_word_masking_data_collator_V2(features):
 # split train, evaluation dataset
 print('split train evaluation dataset ...')
 final_dataset = final_dataset.train_test_split(test_size=0.2)
-
+print(final_dataset)
+print(final_dataset['train'])
+print(final_dataset['train'][0])
 
 
 # load model
 print('load model ...')
 model_checkpoint = "HooshvareLab/bert-base-parsbert-uncased"
 # tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
-model = BertForMaskedLM.from_pretrained(model_checkpoint);
-model.save_pretrained(original_model)
+model = BertForMaskedLM.from_pretrained(original_model);
+# model.save_pretrained(original_model)
 
 # define trainer and args
 training_args = TrainingArguments(
     biased_model,
     overwrite_output_dir=True,
     evaluation_strategy = IntervalStrategy.STEPS, # "steps",
-    save_steps = 500,
-    logging_steps = 500,
-    eval_steps = 500, # Evaluation and Save happens every 250 steps
+    save_steps = 250,
+    logging_steps = 250,
+    eval_steps = 250, # Evaluation and Save happens every 250 steps
     save_total_limit = 2, # Only 2 models are saved. best and last.
     report_to='all',
     per_device_train_batch_size=32,

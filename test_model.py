@@ -2,6 +2,7 @@ from polyleven import levenshtein
 from happytransformer import HappyWordPrediction
 import pandas as pd
 from tqdm import tqdm
+import os
 
 
 class TestModel:
@@ -267,6 +268,8 @@ class TestModel:
                 ) = line.strip().split("^")
 
                 df = self.__check_sentence(sentence)
+
+                os.system("clear")
 
                 df["type_of_error"] = type_of_error
                 df["correct_word"] = correct_word

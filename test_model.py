@@ -7,7 +7,7 @@ from tqdm import tqdm
 class TestModel:
     def __init__(
         self,
-        main_path,
+        main_path="/mnt/disk1/users/naziri",
         model_path="HooshvareLab/bert-base-parsbert-uncased",
         output_file_name="result",
     ):
@@ -289,12 +289,10 @@ if __name__ == "__main__":
     model_path = input("model path, otherwise for default click space: ")
     output_file_name = input("output file name, otherwise for default click space: ")
     if model_path and output_file_name:
-        tm = TestModel(
-            "./data", model_path=model_path, output_file_name=output_file_name
-        )
+        tm = TestModel(model_path=model_path, output_file_name=output_file_name)
     elif model_path:
-        tm = TestModel("./data", model_path=model_path)
+        tm = TestModel(model_path=model_path)
     elif output_file_name:
-        tm = TestModel("./data", output_file_name=output_file_name)
+        tm = TestModel(output_file_name=output_file_name)
     else:
-        tm = TestModel("./data")
+        tm = TestModel()

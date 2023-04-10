@@ -23,25 +23,25 @@ if not torch.cuda.is_available():
 print(transformers.__version__)
 
 
+
+data_path = '/mnt/disk1/users/naziri/train test datasets'
+model_path = '/mnt/disk1/users/naziri/model'
+
 # load dataset
+print('load dataset ...')
 
-main_path = input('main path: ')
-model_path = input('model path: ')
-
-print('load dataset')
-
-correct_dataset = load_dataset('text', data_files={'train': main_path + '/train test datasets/train' + '/correct_sentences.txt'}, split='train')
-dataset = load_dataset('text', data_files={'train': main_path + '/train test datasets/train' + '/corrupted_sentences.txt'}, split='train')
+correct_dataset = load_dataset('text', data_files={'train': data_path + '/train' + '/correct_sentences.txt'}, split='train')
+dataset = load_dataset('text', data_files={'train': data_path + '/train' + '/corrupted_sentences.txt'}, split='train')
 dataset = dataset.add_column("labels", correct_dataset['text'].copy())
 
 del correct_dataset
 torch.cuda.empty_cache()
 gc.collect()
 
+
+
 # load tokenizer
-
-
-print('load tokenizer')
+print('load tokenizer ...')
 model_checkpoint = "HooshvareLab/bert-base-parsbert-uncased"
 tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
 
@@ -73,7 +73,6 @@ def tokenize_function(tokenizer, dataset):
         final_label.append(temp_label)
     return Dataset.from_dict({'input_ids': final_text, 'labels': final_label})
 
-print('tokenize dataset')
 tokenized_dataset = tokenize_function(tokenizer, dataset)
 
 del dataset
@@ -82,14 +81,13 @@ gc.collect()
 
 
 # grouping
-
+print('group text ...')
 def group_texts(data):
     block_size = 64
     concatenated_data = {key: sum(data[key], []) for key in data.keys()}
-    # print(concatenated_data)
     
     total_length = len(concatenated_data[list(data.keys())[0]])
-    # print(total_length)
+
     new_total_length = (total_length // block_size) * block_size
     
     result = {
@@ -100,7 +98,7 @@ def group_texts(data):
     
     return result
 
-print('group text')
+
 final_dataset = tokenized_dataset.map(
     group_texts,
     batched=True,
@@ -115,8 +113,6 @@ gc.collect()
 
 
 # data collector
-
-
 def whole_word_masking_data_collator_V2(features):
     wwm_probability = 0.15
     
@@ -177,25 +173,21 @@ def whole_word_masking_data_collator_V2(features):
 
 
 # split train, evaluation dataset
-
-print('split train evaluation dataset')
+print('split train evaluation dataset ...')
 final_dataset = final_dataset.train_test_split(test_size=0.2)
 
 
 
 # load model
-
-
+print('load model ...')
 model_checkpoint = "HooshvareLab/bert-base-parsbert-uncased"
-tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
+# tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
 model = BertForMaskedLM.from_pretrained(model_checkpoint);
 
 
 # define trainer and args
-
-
 training_args = TrainingArguments(
-    main_path + "/model",
+    model_path,
     overwrite_output_dir=True,
     evaluation_strategy = IntervalStrategy.STEPS, # "steps",
     save_steps = 500,
@@ -223,11 +215,11 @@ trainer = Trainer(
     callbacks = [EarlyStoppingCallback(early_stopping_patience=3)],
 )
 
-
+print('start training ...')
 trainer.train()
 
 trainer.save_model(model_path)
 
 print(trainer.state.best_model_checkpoint)
 
-print('done.')
+print('done. :)')

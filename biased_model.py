@@ -25,7 +25,8 @@ print(transformers.__version__)
 
 
 data_path = '/mnt/disk1/users/naziri/train test datasets'
-model_path = '/mnt/disk1/users/naziri/model'
+original_model = '/mnt/disk1/users/naziri/original_model'
+biased_model = '/mnt/disk1/users/naziri/biased_model'
 tokenizer_path = '/mnt/disk1/users/naziri/tokenizer'
 
 # load dataset
@@ -44,8 +45,8 @@ gc.collect()
 # load tokenizer
 print('load tokenizer ...')
 model_checkpoint = "HooshvareLab/bert-base-parsbert-uncased"
-tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
-tokenizer.save_pretrained(tokenizer_path)
+tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
+# tokenizer.save_pretrained(tokenizer_path)
 
 
 ### batched must be False
@@ -186,11 +187,11 @@ print('load model ...')
 model_checkpoint = "HooshvareLab/bert-base-parsbert-uncased"
 # tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
 model = BertForMaskedLM.from_pretrained(model_checkpoint);
-
+model.save_pretrained(original_model)
 
 # define trainer and args
 training_args = TrainingArguments(
-    model_path,
+    biased_model,
     overwrite_output_dir=True,
     evaluation_strategy = IntervalStrategy.STEPS, # "steps",
     save_steps = 500,
@@ -221,7 +222,7 @@ trainer = Trainer(
 print('start training ...')
 trainer.train()
 
-trainer.save_model(model_path)
+trainer.save_model(biased_model)
 
 print(trainer.state.best_model_checkpoint)
 

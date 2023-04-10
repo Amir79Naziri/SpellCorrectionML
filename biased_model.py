@@ -26,6 +26,7 @@ print(transformers.__version__)
 
 data_path = '/mnt/disk1/users/naziri/train test datasets'
 model_path = '/mnt/disk1/users/naziri/model'
+tokenizer_path = '/mnt/disk1/users/naziri/tokenizer'
 
 # load dataset
 print('load dataset ...')
@@ -44,6 +45,8 @@ gc.collect()
 print('load tokenizer ...')
 model_checkpoint = "HooshvareLab/bert-base-parsbert-uncased"
 tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
+tokenizer.save_pretrained(tokenizer_path)
+
 
 ### batched must be False
 def tokenize_function(tokenizer, dataset):

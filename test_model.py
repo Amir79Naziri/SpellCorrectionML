@@ -279,8 +279,8 @@ class TestModel:
                     final_df = pd.concat([final_df, df], axis=0).copy()
                     final_df = final_df.reset_index(drop=True)
                     counter += 1
-                    # if counter == 4000:
-                    #     break
+                    if counter == 25000:
+                        break
 
                 else:
                     final_df = df.copy()

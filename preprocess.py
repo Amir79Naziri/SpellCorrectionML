@@ -327,7 +327,7 @@ class Preprocess:
                     indexOfAlternative = random.randrange(0, self.NUMOFLETTERS)
                     newToken = self.__manual_replace(t, self.letters[indexOfAlternative], indexOfMisspelled)
                 token = t
-                newLine = li.replace(token, newToken)
+                newLine = li.replace(token, newToken, 1)
                 break
 
         return newLine, token, newToken
@@ -380,7 +380,7 @@ class Preprocess:
                 if not newToken:
                     continue
                 token = t
-                newLine = li.replace(token, newToken)
+                newLine = li.replace(token, newToken, 1)
                 break
         return newLine, token, newToken
     
@@ -424,7 +424,7 @@ class Preprocess:
                     newToken = ""
                     continue
                 token = t
-                newLine = li.replace(token, newToken)
+                newLine = li.replace(token, newToken, 1)
                 break
         return newLine, token, newToken
     
@@ -434,21 +434,21 @@ class Preprocess:
         random.shuffle(possibleErrors)
         for err in possibleErrors:
             if token != err:
-                replaced = li.replace(token, err)
+                replaced = li.replace(token, err, 1)
                 return replaced, token, err
     
     
     def __generate_keyboard_realword_errors_per_line(self, li, token):
         possibleErrors = self.keyboard_realword_errors[token]
         random.shuffle(possibleErrors)
-        newLine = li.replace(token, possibleErrors[0])
+        newLine = li.replace(token, possibleErrors[0], 1)
         return newLine, token, possibleErrors[0]
     
     
     def __generate_substitution_realword_errors_per_line(self, li, token):
         possibleErrors = self.substitution_realword_errors[token]
         random.shuffle(possibleErrors)
-        newLine = li.replace(token, possibleErrors[0])
+        newLine = li.replace(token, possibleErrors[0], 1)
         return newLine, token, possibleErrors[0]
     
     

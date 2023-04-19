@@ -749,6 +749,7 @@ class Preprocess:
 
 if __name__ == "__main__":
     datasets = []
+    main_path = input("input main path: ")
     print("add datasets, otherwise type !q")
     while True:
         dataset = input()
@@ -756,4 +757,4 @@ if __name__ == "__main__":
             break
         datasets.append(dataset)
 
-    pre = Preprocess("./data", datasets)
+    pre = Preprocess(main_path, datasets)

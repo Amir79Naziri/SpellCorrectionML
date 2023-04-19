@@ -27,7 +27,7 @@ print(transformers.__version__)
 data_path = input("train test datasets: ")
 original_model = input("input model: ")
 biased_model = input("output model: ")
-tokenizer_path = input("tokenizer_path: ")
+tokenizer_path = input("tokenizer path: ")
 
 # load dataset
 print("load dataset ...")

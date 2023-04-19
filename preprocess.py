@@ -749,8 +749,8 @@ class Preprocess:
 
 if __name__ == "__main__":
     datasets = []
-    main_path = input("input main path: ")
-    print("add datasets, otherwise type !q")
+    main_path = input("main path: ")
+    print("add dataset addresses, otherwise type !q")
     while True:
         dataset = input()
         if "!q" in dataset:

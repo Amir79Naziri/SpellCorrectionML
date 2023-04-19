@@ -289,13 +289,18 @@ class TestModel:
 
 
 if __name__ == "__main__":
+    main_path = input("main path: ")
     model_path = input("model path, otherwise for default click space: ")
     output_file_name = input("output file name, otherwise for default click space: ")
     if model_path and output_file_name:
-        tm = TestModel(model_path=model_path, output_file_name=output_file_name)
+        tm = TestModel(
+            main_path=main_path,
+            model_path=model_path,
+            output_file_name=output_file_name,
+        )
     elif model_path:
-        tm = TestModel(model_path=model_path)
+        tm = TestModel(main_path=main_path, model_path=model_path)
     elif output_file_name:
-        tm = TestModel(output_file_name=output_file_name)
+        tm = TestModel(main_path=main_path, output_file_name=output_file_name)
     else:
-        tm = TestModel()
+        tm = TestModel(main_path=main_path)

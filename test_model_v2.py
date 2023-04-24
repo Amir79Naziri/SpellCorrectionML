@@ -145,14 +145,14 @@ class TestModel:
             for result in results:
                 levenshtein_score = levenshtein(result.token, target_word)
 
-                if levenshtein_score < 3:
+                if levenshtein_score < 3 and result.score >= 1e-3:
                     most_levenshtein_score = levenshtein_score
                     most_bert_score = result.score
                     most_similar_word = result.token
 
                     return most_similar_word, (most_levenshtein_score, most_bert_score)
 
-            return target_word, (0, -1)  # return original word
+            return target_word, (0, 1)  # return original word
 
         else:
             targets = self.__get_most_similar_token_levenshtein(target_word)

@@ -330,7 +330,7 @@ class Preprocess:
                 line = line.strip()
                 length = len(line.split())
 
-                if length < 10 or length > 30:
+                if length < 5 or length > 100:
                     continue
 
                 if self.__is_line_in_dataset(line):

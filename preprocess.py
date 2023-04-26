@@ -6,7 +6,7 @@ import random
 
 
 class Preprocess:
-    def __init__(self, main_path, datasets, epochs=5):
+    def __init__(self, main_path, datasets, epochs=2):
         self.main_path = main_path
 
         self.DICTIONARY_DIR = main_path + "/dictionary/dictionary.txt"
@@ -152,7 +152,7 @@ class Preprocess:
         self.__prune_dataset()
 
         print("generate test and train dataset ...")
-        self.__generate_final_dataset_test()
+        # self.__generate_final_dataset_test()
 
         final_datasets = []
         for i in range(epochs):
@@ -330,7 +330,7 @@ class Preprocess:
                 line = line.strip()
                 length = len(line.split())
 
-                if length < 5 or length > 100:
+                if length < 5 or length > 256:
                     continue
 
                 if self.__is_line_in_dataset(line):

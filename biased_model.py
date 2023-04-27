@@ -61,12 +61,18 @@ tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
 def tokenize_function(tokenizer, dataset):
     final_text = []
     final_label = []
+    word_indices = []
     for idx in tqdm(range(dataset.num_rows)):
         temp_text = []
         temp_label = []
+        word_index = []
 
-        for text_word, label_word in zip(
-            dataset[idx]["text"].split(), dataset[idx]["labels"].split()
+        splitted_text = dataset[idx]["text"].split()
+
+        for idx, text_word, label_word in zip(
+            range(1, len(splitted_text) + 1),
+            splitted_text,
+            dataset[idx]["labels"].split(),
         ):
             temp_result = tokenizer([text_word, label_word], padding="longest")[
                 "input_ids"
@@ -78,15 +84,21 @@ def tokenize_function(tokenizer, dataset):
 
             temp_text.extend(temp_result[0])
             temp_label.extend(temp_result[1])
+            word_index.extend([idx] * len(temp_result[0]))
 
         temp_text.insert(0, 2)
         temp_text.append(4)
         temp_label.insert(0, 2)
         temp_label.append(4)
+        word_index.insert(0, 0)
+        word_index.append(len(splitted_text) + 1)
 
         final_text.append(temp_text)
         final_label.append(temp_label)
-    return Dataset.from_dict({"input_ids": final_text, "labels": final_label})
+        word_indices.append(word_index)
+    return Dataset.from_dict(
+        {"input_ids": final_text, "labels": final_label, "token_type_ids": word_indices}
+    )
 
 
 tokenized_dataset = tokenize_function(tokenizer, dataset)
@@ -102,7 +114,7 @@ print("group text ...")
 
 
 def group_texts(data):
-    block_size = 64
+    block_size = 512
     concatenated_data = {key: sum(data[key], []) for key in data.keys()}
 
     total_length = len(concatenated_data[list(data.keys())[0]])
@@ -138,7 +150,7 @@ def whole_word_masking_data_collator_V2(features):
     wwm_probability = 0.15
 
     for feature in features:
-        word_ids = feature["input_ids"]
+        word_ids = feature.pop("token_type_ids")
 
         # Create a map between words and corresponding token indices
         mapping = collections.defaultdict(list)
@@ -165,7 +177,7 @@ def whole_word_masking_data_collator_V2(features):
 
         # ERRORS (NOT MASK)
         for idx, (inp_ids, label) in enumerate(zip(input_ids, labels)):
-            if inp_ids != label:
+            if inp_ids != label:  # TODO: think about here
                 new_labels[idx] = label
 
         # 15% RANDOM SELECTED
@@ -214,16 +226,18 @@ training_args = TrainingArguments(
     biased_model,
     overwrite_output_dir=True,
     evaluation_strategy=IntervalStrategy.STEPS,  # "steps",
-    save_steps=250,
-    logging_steps=250,
-    eval_steps=250,  # Evaluation and Save happens every 250 steps
+    save_steps=500,
+    logging_steps=500,
+    eval_steps=500,  # Evaluation and Save happens every 250 steps
     save_total_limit=2,  # Only 2 models are saved. best and last.
     report_to="all",
     per_device_train_batch_size=32,
     per_device_eval_batch_size=32,
-    learning_rate=1e-7,
+    learning_rate=1e-6,
     weight_decay=0.01,
-    load_best_model_at_end=True
+    load_best_model_at_end=True,
+    optim="adamw_torch",
+    fp16=True,
     # push_to_hub=True,
     # hub_model_id="Amir79Naziri/bert-base-parsbert-uncased-finetuned",
 )

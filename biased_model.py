@@ -114,7 +114,7 @@ print("group text ...")
 
 
 def group_texts(data):
-    block_size = 512
+    block_size = 128
     concatenated_data = {key: sum(data[key], []) for key in data.keys()}
 
     total_length = len(concatenated_data[list(data.keys())[0]])

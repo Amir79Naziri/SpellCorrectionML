@@ -237,7 +237,6 @@ training_args = TrainingArguments(
     weight_decay=0.01,
     load_best_model_at_end=True,
     optim="adamw_torch",
-    fp16=True,
     # push_to_hub=True,
     # hub_model_id="Amir79Naziri/bert-base-parsbert-uncased-finetuned",
 )

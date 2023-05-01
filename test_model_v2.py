@@ -3,7 +3,7 @@ from happytransformer import HappyWordPrediction
 import pandas as pd
 from tqdm import tqdm
 import os
-
+import re
 
 class TestModel:
     def __init__(
@@ -184,8 +184,9 @@ class TestModel:
         mix_bert_output_scores = []
 
         detect_in_realword = []
-
-        tokens = sentence.split()
+        
+        sentence = re.sub('\\s+', ' ', sentence)
+        tokens = re.split(r'[\u200c | \\s]', sentence)
 
         for idx, token in enumerate(tokens):
             if len(token) < 3:

@@ -5,6 +5,7 @@ from tqdm import tqdm
 import os
 import re
 
+
 class TestModel:
     def __init__(
         self,
@@ -145,7 +146,7 @@ class TestModel:
             for result in results:
                 levenshtein_score = levenshtein(result.token, target_word)
 
-                if levenshtein_score < 3 and result.score >= 1e-4:
+                if levenshtein_score < 3 and result.score >= 1e-3:
                     most_levenshtein_score = levenshtein_score
                     most_bert_score = result.score
                     most_similar_word = result.token
@@ -184,9 +185,9 @@ class TestModel:
         mix_bert_output_scores = []
 
         detect_in_realword = []
-        
-        sentence = re.sub('\\s+', ' ', sentence)
-        tokens = re.split(r'[\u200c | \\s]', sentence)
+
+        sentence = re.sub("\\s+", " ", sentence)
+        tokens = re.split(r"[\u200c | \\s]", sentence)
 
         for idx, token in enumerate(tokens):
             if len(token) < 3:

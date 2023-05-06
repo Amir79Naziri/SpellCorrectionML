@@ -156,17 +156,18 @@ class Preprocess:
 
         print("generate test and train dataset ...")
         # self.__generate_final_dataset_test()
+        self.__generate_final_dataset_test_100()
 
         final_datasets = []
         for i in range(epochs):
             # self.__generate_final_dataset_train(id_=i)
-            self.__generate_final_dataset_test_100()
-            final_datasets.append(self.TRAIN_DATASET + f"final_dataset_{i}.txt")
+            # final_datasets.append(self.TRAIN_DATASET + f"final_dataset_{i}.txt")
+            pass
 
-        self.__merge_files(final_datasets, self.TRAIN_FINAL_DATASET)
+        # self.__merge_files(final_datasets, self.TRAIN_FINAL_DATASET)
 
         print("generate metadata ...")
-        self.__generate_meta_datasets()
+        # self.__generate_meta_datasets()
 
     def __create_dictionary(self):
         dictionary = {}
@@ -345,8 +346,10 @@ class Preprocess:
         token = ""
         newToken = ""
         tokens = li.split(" ")
-        random.shuffle(tokens)
-        for t in tokens:
+        indices = list(range(0, len(tokens)))
+        random.shuffle(indices)
+        for ind in indices:
+            t = tokens[ind]
             if len(t) > 2:
                 tokenLength = len(t)
                 newToken = "خالی"
@@ -365,7 +368,8 @@ class Preprocess:
                         t, self.letters[indexOfAlternative], indexOfMisspelled
                     )
                 token = t
-                newLine = li.replace(token, newToken, 1)
+                tokens[ind] = newToken
+                newLine = " ".join(tokens)
                 break
 
         return newLine, token, newToken
@@ -406,14 +410,17 @@ class Preprocess:
         newToken = ""
         token = ""
         tokens = li.split(" ")
-        random.shuffle(tokens)
-        for t in tokens:
+        indices = list(range(0, len(tokens)))
+        random.shuffle(indices)
+        for ind in indices:
+            t = tokens[ind]
             if len(t) > 2 and self.__has_polymorph(t):
                 newToken = self.__change_polymorph(t)
                 if not newToken:
                     continue
                 token = t
-                newLine = li.replace(token, newToken, 1)
+                tokens[ind] = newToken
+                newLine = " ".join(tokens)
                 break
         return newLine, token, newToken
 
@@ -445,8 +452,10 @@ class Preprocess:
         newToken = ""
         token = ""
         tokens = li.split(" ")
-        random.shuffle(tokens)
-        for t in tokens:
+        indices = list(range(0, len(tokens)))
+        random.shuffle(indices)
+        for ind in indices:
+            t = tokens[ind]
             if len(t) > 2:
                 newToken = self.__check_substitution_nonrealword_errors(t)
 
@@ -454,29 +463,48 @@ class Preprocess:
                     newToken = ""
                     continue
                 token = t
-                newLine = li.replace(token, newToken, 1)
+                tokens[ind] = newToken
+                newLine = " ".join(tokens)
                 break
         return newLine, token, newToken
 
     def __generate_homophone_realword_errors_per_line(self, li, token):
         possibleErrors = self.homophone_realword_errors[token]
         random.shuffle(possibleErrors)
+
         for err in possibleErrors:
             if token != err:
-                replaced = li.replace(token, err, 1)
+                tokens = li.split(" ")
+                ind = tokens.index(token)
+                tokens[ind] = err
+                replaced = " ".join(tokens)
                 return replaced, token, err
 
     def __generate_keyboard_realword_errors_per_line(self, li, token):
         possibleErrors = self.keyboard_realword_errors[token]
         random.shuffle(possibleErrors)
-        newLine = li.replace(token, possibleErrors[0], 1)
-        return newLine, token, possibleErrors[0]
+
+        for err in possibleErrors:
+            if token != err:
+                tokens = li.split(" ")
+                ind = tokens.index(token)
+                tokens[ind] = err
+                newLine = " ".join(tokens)
+
+                return newLine, token, err
 
     def __generate_substitution_realword_errors_per_line(self, li, token):
         possibleErrors = self.substitution_realword_errors[token]
         random.shuffle(possibleErrors)
-        newLine = li.replace(token, possibleErrors[0], 1)
-        return newLine, token, possibleErrors[0]
+
+        for err in possibleErrors:
+            if token != err:
+                tokens = li.split(" ")
+                ind = tokens.index(token)
+                tokens[ind] = err
+                newLine = " ".join(tokens)
+
+                return newLine, token, err
 
     def __can_be_keyboard_realword_errors(self, li):
         listoftokens = li.split(" ")

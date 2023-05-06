@@ -4,6 +4,8 @@ import pandas as pd
 from tqdm import tqdm
 import os
 import re
+import torch
+import gc
 
 
 class TestModel:
@@ -296,6 +298,9 @@ class TestModel:
 
 
 if __name__ == "__main__":
+    torch.cuda.empty_cache()
+    gc.collect()
+
     main_path = input("main path: ")
     model_path = input("model path, otherwise for default click space: ")
     output_file_name = input("output file name, otherwise for default click space: ")

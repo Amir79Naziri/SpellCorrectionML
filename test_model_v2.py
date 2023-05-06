@@ -186,8 +186,9 @@ class TestModel:
 
         detect_in_realword = []
 
-        sentence = re.sub("\\s+", " ", sentence)
-        tokens = re.split(r"[\u200c | \\s]", sentence)
+        # sentence = re.sub("\\s+", " ", sentence)
+        # tokens = re.split(r"[\u200c | \\s]", sentence)
+        tokens = sentence.split()
 
         for idx, token in enumerate(tokens):
             if len(token) < 3:

@@ -620,7 +620,7 @@ class Preprocess:
                     newToken = "-"
                     typeOfError = "no_error"
                 if newToken is False:
-                    print()
+                    # print()
                     continue
 
                 f2.write(

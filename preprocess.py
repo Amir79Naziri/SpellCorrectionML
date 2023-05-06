@@ -6,7 +6,7 @@ import random
 
 
 class Preprocess:
-    def __init__(self, main_path, datasets, epochs=2):
+    def __init__(self, main_path, datasets, epochs=1):
         self.main_path = main_path
 
         self.DICTIONARY_DIR = main_path + "/dictionary/dictionary.txt"
@@ -40,6 +40,9 @@ class Preprocess:
         )
 
         self.TEST_DATASET = main_path + "/train test datasets/test/final_dataset.txt"
+        self.TEST_DATASET_100 = (
+            main_path + "/train test datasets/test/final_dataset_100.txt"
+        )
 
         self.datasets = datasets
 
@@ -138,7 +141,7 @@ class Preprocess:
         self.dictionary = self.__create_dictionary()
 
         print("generating realword error files ...")
-        self.__generate_realword_errors_per_token_files()
+        # self.__generate_realword_errors_per_token_files()
 
         print("load homophone, keyboard, substitution realword errors ...")
         self.homophone_realword_errors = self.__load_homophone_errors()
@@ -146,17 +149,18 @@ class Preprocess:
         self.substitution_realword_errors = self.__load_substitution_errors()
 
         print("merging datasets ...")
-        self.__merge_files(datasets, self.RAW_DATASET_DIR, True)
+        # self.__merge_files(datasets, self.RAW_DATASET_DIR, True)
 
         print("prune dataset ...")
-        self.__prune_dataset()
+        # self.__prune_dataset()
 
         print("generate test and train dataset ...")
-        self.__generate_final_dataset_test()
+        # self.__generate_final_dataset_test()
 
         final_datasets = []
         for i in range(epochs):
-            self.__generate_final_dataset_train(id_=i)
+            # self.__generate_final_dataset_train(id_=i)
+            self.__generate_final_dataset_test_100()
             final_datasets.append(self.TRAIN_DATASET + f"final_dataset_{i}.txt")
 
         self.__merge_files(final_datasets, self.TRAIN_FINAL_DATASET)
@@ -721,6 +725,136 @@ class Preprocess:
                 )
 
             print("train@epoch", id_)
+            print("total", c0)
+            print("no_error", c7)
+            print("homophone_realword_error", c1)
+            print("keyboard_nonrealword_error", c2)
+            print("polymorph_nonrealword_error", c3)
+            print("substitution_nonrealword_error", c4)
+            print("substitution_realword_error", c5)
+            print("keyboard_realword_error", c6)
+
+    def __generate_final_dataset_test_100(self):
+        with open(self.PRUNE_DATA, "r", encoding="utf-8") as f1, open(
+            self.TEST_DATASET_100, "w", encoding="utf-8"
+        ) as f2:
+            c0 = 0
+            c1 = 0
+            c2 = 0
+            c3 = 0
+            c4 = 0
+            c5 = 0
+            c6 = 0
+            c7 = 0
+
+            for line in f1:
+                line = line.strip()
+
+                newLine = ""
+                oldToken = ""
+                newToken = ""
+
+                typeOfError = ""
+                c0 += 1
+
+                can1 = self.__can_be_homophone_realword_errors(line)
+                if can1 is not False and random.random() < 1 and c1 < 17:
+                    (
+                        newLine,
+                        oldToken,
+                        newToken,
+                    ) = self.__generate_homophone_realword_errors_per_line(line, can1)
+                    typeOfError = "homophone_realword_error"
+                    c1 += 1
+
+                elif random.random() < 0:  # No error
+                    newLine = line
+                    oldToken = "-"
+                    newToken = "-"
+                    typeOfError = "no_error"
+                    c7 += 1
+
+                elif random.random() <= 0.42:  # real word error
+                    can5 = self.__can_be_substitution_realword_errors(line)
+                    can6 = self.__can_be_keyboard_realword_errors(line)
+
+                    i = random.randrange(2, 4)
+
+                    if i == 2 and can5 is not False and c5 < 17:
+                        (
+                            newLine,
+                            oldToken,
+                            newToken,
+                        ) = self.__generate_substitution_realword_errors_per_line(
+                            line, can5
+                        )
+                        typeOfError = "substitution_realword_error"
+                        c5 += 1
+                    elif i == 3 and can6 is not False and c6 < 17:
+                        (
+                            newLine,
+                            oldToken,
+                            newToken,
+                        ) = self.__generate_keyboard_realword_errors_per_line(
+                            line, can6
+                        )
+                        if newToken is False:
+                            continue
+                        typeOfError = "keyboard_realword_error"
+                        c6 += 1
+
+                else:  # non real word error
+                    i = random.randrange(1, 4)
+                    if i == 1 and c2 < 17:
+                        (
+                            newLine,
+                            oldToken,
+                            newToken,
+                        ) = self.__generate_keyboard_nonrealword_errors_per_line(line)
+                        typeOfError = "keyboard_nonrealword_error"
+                        c2 += 1
+                    elif i == 2 and c3 < 16:
+                        (
+                            newLine,
+                            oldToken,
+                            newToken,
+                        ) = self.__generate_polymorph_nonrealword_per_line(line)
+                        typeOfError = "polymorph_nonrealword_error"
+                        c3 += 1
+                    elif i == 3 and c4 < 16:
+                        (
+                            newLine,
+                            oldToken,
+                            newToken,
+                        ) = self.__generate_substitution_nonrealword_errors_per_line(
+                            line
+                        )
+                        typeOfError = "substitution_nonrealword_error"
+                        c4 += 1
+
+                if typeOfError != "":
+                    f2.write(
+                        newLine.strip()
+                        + "^"
+                        + str(typeOfError)
+                        + "^"
+                        + str(oldToken)
+                        + "^"
+                        + str(newToken)
+                        + "\n"
+                    )
+
+                if (
+                    c1 == 17
+                    and c6 == 17
+                    and c5 == 17
+                    and c2 == 17
+                    and c3 == 16
+                    and c4 == 16
+                ):
+                    break
+
+            print("test_100")
             print("total", c0)
             print("no_error", c7)
             print("homophone_realword_error", c1)

@@ -155,7 +155,7 @@ class Preprocess:
         # self.__prune_dataset()
 
         print("generate test and train dataset ...")
-        # self.__generate_final_dataset_test()
+        self.__generate_final_dataset_test()
         self.__generate_final_dataset_test_100()
 
         final_datasets = []

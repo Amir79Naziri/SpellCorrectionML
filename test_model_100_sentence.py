@@ -41,7 +41,7 @@ class TestModel:
         self.realword_errors = self.__load_substitution_errors(total_realword_errors)
 
         print("load model ...")
-        self.model = HappyWordPrediction("BERT", load_path=model_path)
+        self.model = HappyWordPrediction("BERT", load_path=model_path).to("cuda:1")
 
         print("evaluation ...")
         self.__evaluate()

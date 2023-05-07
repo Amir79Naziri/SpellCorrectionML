@@ -534,13 +534,22 @@ class Preprocess:
         with open(self.PRUNE_DATA, "r", encoding="utf-8") as f1, open(
             self.TEST_DATASET, "w", encoding="utf-8"
         ) as f2:
-            c0 = 0
-            c1 = 0
-            c2 = 0
-            c3 = 0
-            c4 = 0
-            c5 = 0
-            c6 = 0
+            total = 0
+
+            homophone_realword_error = 0
+            homophone_realword_correct = 0
+
+            substitution_realword_error = 0
+            substitution_realword_correct = 0
+
+            keyboard_realword_error = 0
+            keyboard_realword_correct = 0
+
+            keyboard_nonrealword_error = 0
+
+            polymorph_nonrealword_error = 0
+
+            substitution_nonrealword_error = 0
 
             for line in f1:
                 line = line.strip()
@@ -549,42 +558,108 @@ class Preprocess:
                 oldToken = ""
                 newToken = ""
 
-                c0 += 1
-
-                typeOfError = 0
+                type_ = ""
+                total += 1
 
                 can1 = self.__can_be_homophone_realword_errors(line)
-                can5 = self.__can_be_substitution_realword_errors(line)
-                can6 = self.__can_be_keyboard_realword_errors(line)
+                if can1 is not False and random.random() < 0.8:
+                    if random.random() < 0.5:
+                        (
+                            newLine,
+                            oldToken,
+                            newToken,
+                        ) = self.__generate_homophone_realword_errors_per_line(
+                            line, can1
+                        )
+                        type_ = "homophone_realword_error"
+                        homophone_realword_error += 1
+                    else:
+                        (
+                            _,
+                            oldToken,
+                            newToken,
+                        ) = self.__generate_homophone_realword_errors_per_line(
+                            line, can1
+                        )
+                        newLine = line
+                        type_ = "homophone_realword_correct"
+                        homophone_realword_correct += 1
 
-                if can1 is not False:
-                    (
-                        newLine,
-                        oldToken,
-                        newToken,
-                    ) = self.__generate_homophone_realword_errors_per_line(line, can1)
-                    typeOfError = "homophone_realword_error"
-                    c1 += 1
-                elif random.random() < 0.3:
-                    i = random.randrange(2, 7)
+                elif random.random() <= 0.5:  # real word error
+                    can5 = self.__can_be_substitution_realword_errors(line)
+                    can6 = self.__can_be_keyboard_realword_errors(line)
 
-                    if i == 2:
+                    i = random.randrange(2, 4)
+
+                    if i == 2 and can5 is not False:
+                        if random.random() < 0.5:
+                            (
+                                newLine,
+                                oldToken,
+                                newToken,
+                            ) = self.__generate_substitution_realword_errors_per_line(
+                                line, can5
+                            )
+                            type_ = "substitution_realword_error"
+                            substitution_realword_error += 1
+                        else:
+                            (
+                                _,
+                                oldToken,
+                                newToken,
+                            ) = self.__generate_substitution_realword_errors_per_line(
+                                line, can5
+                            )
+                            newLine = line
+                            type_ = "substitution_realword_correct"
+                            substitution_realword_correct += 1
+
+                    elif i == 3 and can6 is not False:
+                        if random.random() < 0.5:
+                            (
+                                newLine,
+                                oldToken,
+                                newToken,
+                            ) = self.__generate_keyboard_realword_errors_per_line(
+                                line, can6
+                            )
+                            if newToken is False:
+                                continue
+                            type_ = "keyboard_realword_error"
+                            keyboard_realword_error += 1
+                        else:
+                            (
+                                _,
+                                oldToken,
+                                newToken,
+                            ) = self.__generate_keyboard_realword_errors_per_line(
+                                line, can6
+                            )
+                            if newToken is False:
+                                continue
+                            newLine = line
+                            type_ = "keyboard_realword_correct"
+                            keyboard_realword_correct += 1
+
+                else:  # non real word error
+                    i = random.randrange(1, 4)
+                    if i == 1:
                         (
                             newLine,
                             oldToken,
                             newToken,
                         ) = self.__generate_keyboard_nonrealword_errors_per_line(line)
-                        typeOfError = "keyboard_nonrealword_error"
-                        c2 += 1
-                    elif i == 3:
+                        type_ = "keyboard_nonrealword_error"
+                        keyboard_nonrealword_error += 1
+                    elif i == 2:
                         (
                             newLine,
                             oldToken,
                             newToken,
                         ) = self.__generate_polymorph_nonrealword_per_line(line)
-                        typeOfError = "polymorph_nonrealword_error"
-                        c3 += 1
-                    elif i == 4:
+                        type_ = "polymorph_nonrealword_error"
+                        polymorph_nonrealword_error += 1
+                    elif i == 3:
                         (
                             newLine,
                             oldToken,
@@ -592,41 +667,13 @@ class Preprocess:
                         ) = self.__generate_substitution_nonrealword_errors_per_line(
                             line
                         )
-                        typeOfError = "substitution_nonrealword_error"
-                        c4 += 1
-                    elif i == 5 and can5 is not False:
-                        (
-                            newLine,
-                            oldToken,
-                            newToken,
-                        ) = self.__generate_substitution_realword_errors_per_line(
-                            line, can5
-                        )
-                        typeOfError = "substitution_realword_error"
-                        c5 += 1
-                    elif i == 6 and can6 is not False:
-                        (
-                            newLine,
-                            oldToken,
-                            newToken,
-                        ) = self.__generate_keyboard_realword_errors_per_line(
-                            line, can6
-                        )
-                        typeOfError = "keyboard_realword_error"
-                        c6 += 1
-                else:
-                    newLine = line
-                    oldToken = "-"
-                    newToken = "-"
-                    typeOfError = "no_error"
-                if newToken is False:
-                    # print()
-                    continue
+                        type_ = "substitution_nonrealword_error"
+                        substitution_nonrealword_error += 1
 
                 f2.write(
                     newLine.strip()
                     + "^"
-                    + str(typeOfError)
+                    + str(type_)
                     + "^"
                     + str(oldToken)
                     + "^"
@@ -635,13 +682,16 @@ class Preprocess:
                 )
 
             print("test")
-            print("total:", c0)
-            print("homophone_realword_error:", c1)
-            print("keyboard_nonrealword_error:", c2)
-            print("polymorph_nonrealword_error:", c3)
-            print("substitution_nonrealword_error:", c4)
-            print("substitution_realword_error:", c5)
-            print("keyboard_realword_error:", c6)
+            print("total", total)
+            print("homophone_realword_error", homophone_realword_error)
+            print("homophone_realword_correct", homophone_realword_correct)
+            print("keyboard_realword_error", keyboard_realword_error)
+            print("keyboard_realword_correct", keyboard_realword_correct)
+            print("substitution_realword_error", substitution_realword_error)
+            print("substitution_realword_correct", substitution_realword_correct)
+            print("polymorph_nonrealword_error", polymorph_nonrealword_error)
+            print("substitution_nonrealword_error", substitution_nonrealword_error)
+            print("keyboard_nonrealword_error", keyboard_nonrealword_error)
 
     def __generate_final_dataset_train(self, id_=1):
         with open(self.PRUNE_DATA, "r", encoding="utf-8") as f1, open(

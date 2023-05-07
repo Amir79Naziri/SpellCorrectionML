@@ -194,31 +194,6 @@ class TestModel:
             if len(token) < 3:
                 continue
 
-            ### NonRealWord
-            if token not in self.dictionary:
-                temp_sentence = ""
-
-                for i in range(0, len(tokens)):
-                    if i == idx:
-                        temp_sentence += "[MASK] "
-                    else:
-                        temp_sentence += tokens[i] + " "
-
-                ### TYPE 3
-                (
-                    most_similar_word_mix,
-                    most_score_mix,
-                ) = self.__get_most_similar_token_mix(temp_sentence, token)
-
-                sentences.append(sentence)
-                candidate_words.append(token)
-
-                mix_output_words.append(most_similar_word_mix)
-                mix_levenshtein_output_scores.append(most_score_mix[0])
-                mix_bert_output_scores.append(most_score_mix[1])
-
-                detect_in_realword.append(False)
-
             ### RealWord
             if token in self.realword_errors:
                 possiblewords = self.realword_errors[token]
@@ -249,6 +224,31 @@ class TestModel:
                 mix_bert_output_scores.append(most_score_mix[1])
 
                 detect_in_realword.append(True)
+
+            ### NonRealWord
+            elif token not in self.dictionary:
+                temp_sentence = ""
+
+                for i in range(0, len(tokens)):
+                    if i == idx:
+                        temp_sentence += "[MASK] "
+                    else:
+                        temp_sentence += tokens[i] + " "
+
+                ### TYPE 3
+                (
+                    most_similar_word_mix,
+                    most_score_mix,
+                ) = self.__get_most_similar_token_mix(temp_sentence, token)
+
+                sentences.append(sentence)
+                candidate_words.append(token)
+
+                mix_output_words.append(most_similar_word_mix)
+                mix_levenshtein_output_scores.append(most_score_mix[0])
+                mix_bert_output_scores.append(most_score_mix[1])
+
+                detect_in_realword.append(False)
 
         return pd.DataFrame(
             {

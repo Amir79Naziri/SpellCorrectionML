@@ -141,7 +141,7 @@ class Preprocess:
         self.dictionary = self.__create_dictionary()
 
         print("generating realword error files ...")
-        self.__generate_realword_errors_per_token_files()
+        # self.__generate_realword_errors_per_token_files()
 
         print("load homophone, keyboard, substitution realword errors ...")
         self.homophone_realword_errors = self.__load_homophone_errors()
@@ -155,7 +155,7 @@ class Preprocess:
         # self.__prune_dataset()
 
         print("generate test and train dataset ...")
-        # self.__generate_final_dataset_test()
+        self.__generate_final_dataset_test()
         # self.__generate_final_dataset_test_100()
 
         final_datasets = []
@@ -592,7 +592,7 @@ class Preprocess:
                     i = random.randrange(2, 4)
 
                     if i == 2 and can5 is not False:
-                        if random.random() < 0.5:
+                        if random.random() < 0.5 and substitution_realword_error < 5000:
                             (
                                 newLine,
                                 oldToken,
@@ -602,7 +602,7 @@ class Preprocess:
                             )
                             type_ = "substitution_realword_error"
                             substitution_realword_error += 1
-                        else:
+                        elif substitution_realword_correct < 5000:
                             (
                                 _,
                                 oldToken,
@@ -615,7 +615,7 @@ class Preprocess:
                             substitution_realword_correct += 1
 
                     elif i == 3 and can6 is not False:
-                        if random.random() < 0.5:
+                        if random.random() < 0.5 and keyboard_realword_error < 5000:
                             (
                                 newLine,
                                 oldToken,
@@ -627,7 +627,7 @@ class Preprocess:
                                 continue
                             type_ = "keyboard_realword_error"
                             keyboard_realword_error += 1
-                        else:
+                        elif keyboard_realword_correct < 5000:
                             (
                                 _,
                                 oldToken,
@@ -643,7 +643,7 @@ class Preprocess:
 
                 else:  # non real word error
                     i = random.randrange(1, 4)
-                    if i == 1:
+                    if i == 1 and keyboard_nonrealword_error < 5000:
                         (
                             newLine,
                             oldToken,
@@ -651,7 +651,7 @@ class Preprocess:
                         ) = self.__generate_keyboard_nonrealword_errors_per_line(line)
                         type_ = "keyboard_nonrealword_error"
                         keyboard_nonrealword_error += 1
-                    elif i == 2:
+                    elif i == 2 and polymorph_nonrealword_error < 5000:
                         (
                             newLine,
                             oldToken,
@@ -659,7 +659,7 @@ class Preprocess:
                         ) = self.__generate_polymorph_nonrealword_per_line(line)
                         type_ = "polymorph_nonrealword_error"
                         polymorph_nonrealword_error += 1
-                    elif i == 3:
+                    elif i == 3 and substitution_nonrealword_error < 5000:
                         (
                             newLine,
                             oldToken,

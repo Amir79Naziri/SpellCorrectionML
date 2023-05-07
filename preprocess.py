@@ -392,10 +392,10 @@ class Preprocess:
                     newtoken += word[z]
                 possibletokens.append(newtoken)
 
+        random.shuffle(possibletokens)
         for p in possibletokens:
             if p not in self.dictionary:
-                random.shuffle(possibletokens)
-                return possibletokens[0]
+                return p
 
         return False
 
@@ -441,10 +441,10 @@ class Preprocess:
                 ind += 1
             possibletokens.append(newtoken)
 
+        random.shuffle(possibletokens)
         for p in possibletokens:
             if p not in self.dictionary:
-                random.shuffle(possibletokens)
-                return possibletokens[0]
+                return p
         return False
 
     def __generate_substitution_nonrealword_errors_per_line(self, li):

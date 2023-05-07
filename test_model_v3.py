@@ -237,6 +237,7 @@ class TestModel:
                     candidate_word = correct_word
                 else:
                     candidate_word = misspelled_word
+                print(type_)
 
                 df = self.__check_sentence(sentence, candidate_word)
 

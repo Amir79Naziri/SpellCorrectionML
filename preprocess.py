@@ -103,15 +103,15 @@ class Preprocess:
             "ب": "قفلیزر",
             "إ": "قفلیزر",
             "پ": "ونتد",
-            "ت": "اعهنپد",
-            "ة": "اعهنپد",
+            "ت": "اآعهنپد",
+            "ة": "اآعهنپد",
             "ث": "سیقص",
             "ج": "چگکح",
             "چ": "جگ",
             "ح": "مکجخ",
             "خ": "هنمح",
-            "د": "اتذپ",
-            "ذ": "الدر",
+            "د": "اآتذپ",
+            "ذ": "اآلدر",
             "ر": "لبذز",
             "ز": "یبرط",
             "ژ": "یبطر",
@@ -122,14 +122,14 @@ class Preprocess:
             "ض": "صسش",
             "ط": "ظسیز",
             "ظ": "طشس",
-            "ع": "غاته",
+            "ع": "غاآته",
             "غ": "فلاع",
             "ف": "قغبل",
             "ق": "ثفبی",
             "ک": "گمحج",
             "گ": "جک",
-            "ل": "ابغفذر",
-            "أ": "ابغفذر",
+            "ل": "اآبغفذر",
+            "أ": "اآبغفذر",
             "م": "کنحخو",
             "ن": "متخهوپ",
             "و": "پنم",
@@ -141,7 +141,7 @@ class Preprocess:
         self.dictionary = self.__create_dictionary()
 
         print("generating realword error files ...")
-        # self.__generate_realword_errors_per_token_files()
+        self.__generate_realword_errors_per_token_files()
 
         print("load homophone, keyboard, substitution realword errors ...")
         self.homophone_realword_errors = self.__load_homophone_errors()
@@ -155,7 +155,7 @@ class Preprocess:
         # self.__prune_dataset()
 
         print("generate test and train dataset ...")
-        self.__generate_final_dataset_test()
+        # self.__generate_final_dataset_test()
         # self.__generate_final_dataset_test_100()
 
         final_datasets = []

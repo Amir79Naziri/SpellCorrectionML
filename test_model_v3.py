@@ -213,11 +213,11 @@ class TestModel:
 
         return pd.DataFrame(
             {
-                "sentence": sentence,
-                "is_realword": detect_is_realword,
-                "mix_word": most_similar_word_mix,
-                "mix_levenshtein_score": most_score_mix[0],
-                "mix_bert_score": most_score_mix[1],
+                "sentence": [sentence],
+                "is_realword": [detect_is_realword],
+                "mix_word": [most_similar_word_mix],
+                "mix_levenshtein_score": [most_score_mix[0]],
+                "mix_bert_score": [most_score_mix[1]],
             }
         )
 

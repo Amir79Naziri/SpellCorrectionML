@@ -791,16 +791,17 @@ class Preprocess:
                         typeOfError = "substitution_nonrealword_error"
                         c4 += 1
 
-                f2.write(
-                    newLine.strip()
-                    + "^"
-                    + str(typeOfError)
-                    + "^"
-                    + str(oldToken)
-                    + "^"
-                    + str(newToken)
-                    + "\n"
-                )
+                if typeOfError:
+                    f2.write(
+                        newLine.strip()
+                        + "^"
+                        + str(typeOfError)
+                        + "^"
+                        + str(oldToken)
+                        + "^"
+                        + str(newToken)
+                        + "\n"
+                    )
 
             print("train@epoch", id_)
             print("total", c0)

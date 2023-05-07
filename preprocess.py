@@ -669,17 +669,17 @@ class Preprocess:
                         )
                         type_ = "substitution_nonrealword_error"
                         substitution_nonrealword_error += 1
-
-                f2.write(
-                    newLine.strip()
-                    + "^"
-                    + str(type_)
-                    + "^"
-                    + str(oldToken)
-                    + "^"
-                    + str(newToken)
-                    + "\n"
-                )
+                if newLine:
+                    f2.write(
+                        newLine.strip()
+                        + "^"
+                        + str(type_)
+                        + "^"
+                        + str(oldToken)
+                        + "^"
+                        + str(newToken)
+                        + "\n"
+                    )
 
             print("test")
             print("total", total)

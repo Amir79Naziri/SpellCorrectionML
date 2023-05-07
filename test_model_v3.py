@@ -24,7 +24,7 @@ class TestModel:
             main_path + "/dictionary/homophone_realword_errors.txt"
         )
         self.FINAL_DATASET_DIR = (
-            main_path + "/train test datasets/test/final_dataset_wiki.txt"
+            main_path + "/train test datasets/test/final_dataset_v2.txt"
         )
         self.OUTPUT_FILE_DIR = (
             main_path + "/evaluation results/" + output_file_name + ".csv"

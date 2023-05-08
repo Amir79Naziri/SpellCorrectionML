@@ -443,7 +443,7 @@ class Preprocess:
 
         random.shuffle(possibletokens)
         for p in possibletokens:
-            if p not in self.dictionary:
+            if p not in self.dictionary and p != token:
                 return p
         return False
 

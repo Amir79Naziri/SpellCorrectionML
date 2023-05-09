@@ -169,7 +169,7 @@ class TestModel:
                     targets.append({"word": temp_word})
 
             if len(targets) == 0:
-                targets = self.__get_most_similar_token_levenshtein(target_word)
+                targets.extend(self.__get_most_similar_token_levenshtein(target_word))
                 version = 1
             else:
                 version = 2
@@ -177,7 +177,7 @@ class TestModel:
             results = self.model.predict_mask(
                 sentence.strip(),
                 targets=[i["word"] for i in targets],
-                top_k=min(top_k, len(targets)) if version == 1 else 1,
+                top_k=min(top_k, len(targets)),
             )
 
             for result in results:

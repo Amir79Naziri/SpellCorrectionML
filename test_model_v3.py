@@ -161,7 +161,7 @@ class TestModel:
             results = self.model.predict_mask(
                 sentence.strip(),
                 targets=[i["word"] for i in targets],
-                top_k=min(5, len(targets)),
+                top_k=min(top_k, len(targets)),
             )
 
             for result in results:

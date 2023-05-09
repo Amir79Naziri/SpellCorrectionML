@@ -166,7 +166,7 @@ class TestModel:
                     + target_word[j + 1 :]
                 )
                 if temp_word in self.dictionary:
-                    targets.append(temp_word)
+                    targets.append({"word": temp_word})
 
             if len(targets) == 0:
                 targets = self.__get_most_similar_token_levenshtein(target_word)

@@ -120,6 +120,12 @@ class TestModel:
         return total_realword_errors
 
     def __get_most_similar_token_levenshtein(self, target_word, k=300):
+        def find(myList):
+            for element in myList:
+                if element.get("score") > 2:
+                    return myList.index(element)
+            return len(myList)
+
         list_of_similars = []
 
         for word in self.dictionary:
@@ -129,7 +135,11 @@ class TestModel:
             list_of_similars.append({"word": word, "score": score})
 
         list_of_similars.sort(key=lambda x: x["score"])
-        list_of_similars = list_of_similars[0 : min(k, len(list_of_similars) - 1)]
+        indUntil2 = find(list_of_similars)
+
+        list_of_similars = list_of_similars[
+            0 : max(indUntil2, min(k, len(list_of_similars) - 1))
+        ]
 
         return list_of_similars
 
@@ -158,23 +168,7 @@ class TestModel:
             return target_word, (0, 1)  # return original word
 
         else:
-            targets = []
-            for i in range(len(target_word) - 1):
-                j = i + 1
-                temp_word = (
-                    target_word[:i]
-                    + target_word[j]
-                    + target_word[i]
-                    + target_word[j + 1 :]
-                )
-                if temp_word in self.dictionary:
-                    targets.append({"word": temp_word})
-
-            if len(targets) == 0:
-                targets.extend(self.__get_most_similar_token_levenshtein(target_word))
-                version = 1
-            else:
-                version = 2
+            targets = self.__get_most_similar_token_levenshtein(target_word)
 
             results = self.model.predict_mask(
                 sentence.strip(),

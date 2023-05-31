@@ -5,6 +5,19 @@ from tqdm import tqdm
 import os
 import re
 
+"""
+
+    Non Real-word:
+        this versions add huristic for substitution errors.
+
+    Real-word:
+        same as version2
+    
+    Procedure:
+        same as version3
+    
+"""
+
 
 class TestModel:
     def __init__(

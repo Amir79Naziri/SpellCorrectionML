@@ -5,6 +5,21 @@ from tqdm import tqdm
 import os
 import re
 
+"""
+
+    Non Real-word:
+        this versions add all distance <= 2 words for candidate words. 
+        If it is smaller than limit(300) then add more words with higher distance
+        until it reaches limit. 
+        
+    Real-word:
+        same as version2
+    
+    Procedure:
+        same as version3
+    
+"""
+
 
 class TestModel:
     def __init__(

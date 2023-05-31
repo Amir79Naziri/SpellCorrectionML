@@ -53,6 +53,8 @@ print(dataset)
 # load tokenizer
 print("load tokenizer ...")
 model_checkpoint = "HooshvareLab/bert-base-parsbert-uncased"
+## HooshvareLab/roberta-fa-zwnj-base
+# HooshvareLab/bert-fa-zwnj-base
 tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
 # tokenizer.save_pretrained(tokenizer_path)
 

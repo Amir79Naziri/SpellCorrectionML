@@ -5,6 +5,20 @@ from tqdm import tqdm
 import os
 import re
 
+"""
+
+    Non Real-word:
+        same as version1
+
+    Real-word:
+        same as version2
+    
+    Procedure:
+        only checks and masks candidate words, not all words.
+        This version is not good for production.
+    
+"""
+
 
 class TestModel:
     def __init__(

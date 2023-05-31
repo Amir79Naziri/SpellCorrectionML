@@ -5,6 +5,21 @@ from tqdm import tqdm
 import os
 import re
 
+"""
+
+    Non Real-word:
+        same as version1
+        
+    Real-word:
+        This version makes real word suggestions greedy. So if suggested word distance is less than 3
+        and its bert score is bigger than 1e-3, this is the result.
+        otherwise, it returns origina word.
+        
+    Procedure:
+        same as version1
+    
+"""
+
 
 class TestModel:
     def __init__(

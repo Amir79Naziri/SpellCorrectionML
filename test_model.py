@@ -4,6 +4,13 @@ import pandas as pd
 from tqdm import tqdm
 import os
 
+"""
+    Real-word:
+        This original version makes real word suggestions so naive. 
+        It returns first suggested word by Bert as result.
+    
+"""
+
 
 class TestModel:
     def __init__(

@@ -169,8 +169,7 @@ class TestModel:
             return target_word, (0, 1)  # return original word
 
         else:
-            targets = self.__get_most_similar_token_levenshtein(target_word)
-
+            targets = []
             for i in range(len(target_word) - 1):
                 j = i + 1
                 temp_word = (
@@ -181,6 +180,12 @@ class TestModel:
                 )
                 if temp_word in self.dictionary:
                     targets.append({"word": temp_word})
+
+            if len(targets) == 0:
+                targets.extend(self.__get_most_similar_token_levenshtein(target_word))
+                version = 1
+            else:
+                version = 2
 
             results = self.model.predict_mask(
                 sentence.strip(),

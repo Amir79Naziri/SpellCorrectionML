@@ -8,8 +8,9 @@ import re
 """
 
     Non Real-word:
-        this versions add huristic for substitution errors.
-
+        this versions add all distance <= 1 words for candidate words + huristic for substitution errors. 
+        Also it is witout limit.
+               
     Real-word:
         same as version2
     
@@ -131,6 +132,12 @@ class TestModel:
         return total_realword_errors
 
     def __get_most_similar_token_levenshtein(self, target_word, k=300):
+        def find(myList):
+            for element in myList:
+                if element.get("score") > 1:
+                    return myList.index(element)
+            return len(myList)
+
         list_of_similars = []
 
         for word in self.dictionary:
@@ -140,7 +147,17 @@ class TestModel:
             list_of_similars.append({"word": word, "score": score})
 
         list_of_similars.sort(key=lambda x: x["score"])
-        list_of_similars = list_of_similars[0 : min(k, len(list_of_similars) - 1)]
+        indUntil1 = find(list_of_similars)
+
+        list_of_similars = list_of_similars[0:indUntil1]
+
+        for i in range(len(target_word) - 1):
+            j = i + 1
+            temp_word = (
+                target_word[:i] + target_word[j] + target_word[i] + target_word[j + 1 :]
+            )
+            if temp_word in self.dictionary:
+                list_of_similars.append({"word": temp_word, "score": 2})
 
         return list_of_similars
 
@@ -170,17 +187,6 @@ class TestModel:
 
         else:
             targets = self.__get_most_similar_token_levenshtein(target_word)
-
-            for i in range(len(target_word) - 1):
-                j = i + 1
-                temp_word = (
-                    target_word[:i]
-                    + target_word[j]
-                    + target_word[i]
-                    + target_word[j + 1 :]
-                )
-                if temp_word in self.dictionary:
-                    targets.append({"word": temp_word})
 
             results = self.model.predict_mask(
                 sentence.strip(),

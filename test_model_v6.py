@@ -150,6 +150,7 @@ class TestModel:
         indUntil1 = find(list_of_similars)
 
         list_of_similars = list_of_similars[0:indUntil1]
+        list_of_similars_h = []
 
         for i in range(len(target_word) - 1):
             j = i + 1
@@ -157,9 +158,9 @@ class TestModel:
                 target_word[:i] + target_word[j] + target_word[i] + target_word[j + 1 :]
             )
             if temp_word in self.dictionary:
-                list_of_similars.append({"word": temp_word, "score": 2})
+                list_of_similars_h.append({"word": temp_word, "score": 2})
 
-        return list_of_similars
+        return list_of_similars_h if len(list_of_similars_h) > 0 else list_of_similars
 
     def __get_most_similar_token_mix(
         self, sentence, target_word, top_k=10, targets=None

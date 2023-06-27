@@ -27,6 +27,7 @@ class TestModel:
         output_file_name="result",
         version=2
     ):
+        self.version = version
         self.DICTIONARY_DIR = main_path + "/dictionary/dictionary.txt"
         self.KEYBOARD_ERRORS_DIR = (
             main_path + "/dictionary/keyboard_realword_errors.txt"

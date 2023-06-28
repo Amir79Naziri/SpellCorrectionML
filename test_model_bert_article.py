@@ -189,7 +189,9 @@ class TestModel:
             for result in results:
                 levenshtein_score = levenshtein(result.token, target_word)
 
-                if levenshtein_score < most_levenshtein_score:
+                if most_levenshtein_score == None or (
+                    levenshtein_score < most_levenshtein_score
+                ):
                     most_levenshtein_score = levenshtein_score
                     most_bert_score = result.score
                     most_similar_word = result.token

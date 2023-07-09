@@ -23,11 +23,19 @@ if not torch.cuda.is_available():
 print(transformers.__version__)
 
 
-# data_path = '/mnt/disk1/users/naziri/train test datasets'
 data_path = input("train test datasets: ")
-original_model = input("input model: ")
-biased_model = input("output model: ")
-tokenizer_path = input("tokenizer path: ")
+download = input("download a new model[y/n]: ")
+
+if 'y' in download:
+    model_checkpoint = input("model checkpoint: ")
+    original_model = input("new model save path: ")
+    tokenizer_path = input("new tokenizer save path: ")
+else:
+    original_model = input("input model path: ")
+    tokenizer_path = input("tokenizer path: ")
+    
+biased_model = input("biased model save path: ")
+
 
 # load dataset
 print("load dataset ...")
@@ -52,11 +60,12 @@ print(dataset)
 
 # load tokenizer
 print("load tokenizer ...")
-model_checkpoint = "HooshvareLab/bert-base-parsbert-uncased"
-## HooshvareLab/roberta-fa-zwnj-base
-# HooshvareLab/bert-fa-zwnj-base
-tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
-# tokenizer.save_pretrained(tokenizer_path)
+
+if 'y' in download:
+    tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
+    tokenizer.save_pretrained(tokenizer_path)
+else:
+    tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
 
 
 ### batched must be False
@@ -116,7 +125,7 @@ print("group text ...")
 
 
 def group_texts(data):
-    block_size = 128  # TOD: test with 256
+    block_size = 128  # TODO: test with 256
     concatenated_data = {key: sum(data[key], []) for key in data.keys()}
 
     total_length = len(concatenated_data[list(data.keys())[0]])
@@ -218,10 +227,13 @@ print(final_dataset)
 
 # load model
 print("load model ...")
-model_checkpoint = "HooshvareLab/bert-base-parsbert-uncased"
-# tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
-model = BertForMaskedLM.from_pretrained(original_model)
-# model.save_pretrained(original_model)
+
+if 'y' in download:
+    model = BertForMaskedLM.from_pretrained(model_checkpoint)
+    model.save_pretrained(original_model)
+else:
+    model = BertForMaskedLM.from_pretrained(original_model)
+
 
 # define trainer and args
 training_args = TrainingArguments(

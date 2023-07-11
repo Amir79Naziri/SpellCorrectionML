@@ -90,8 +90,10 @@ def tokenize_function(tokenizer, dataset):
             ]
 
             for i in range(2):
+                print(temp_result)
                 temp_result[i].remove(2)
                 temp_result[i].remove(4)
+                
 
             temp_text.extend(temp_result[0])
             temp_label.extend(temp_result[1])

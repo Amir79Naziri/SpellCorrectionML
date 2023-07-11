@@ -94,7 +94,7 @@ def tokenize_function(tokenizer, dataset):
                 t = tokenizer.bos_token + tokenizer.pad_token + tokenizer.eos_token
                 print(tokenizer(t))
                 
-                temp_result[i].remove(
+                temp_result[i].remove(2)
                 temp_result[i].remove(4)
                 
 

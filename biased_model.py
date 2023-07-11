@@ -92,8 +92,7 @@ def tokenize_function(tokenizer, dataset):
             ]
 
             for i in range(2):
-                print(tokenizer(''))
-                
+
                 temp_result[i].remove(bos_token)
                 temp_result[i].remove(eos_token)
                 

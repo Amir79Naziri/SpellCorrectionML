@@ -70,6 +70,8 @@ else:
 
 ### batched must be False
 def tokenize_function(tokenizer, dataset):
+    bos_token, eos_token = tokenizer("")["input_ids"]
+    
     final_text = []
     final_label = []
     word_indices = []
@@ -92,18 +94,20 @@ def tokenize_function(tokenizer, dataset):
             for i in range(2):
                 print(tokenizer(''))
                 
-                temp_result[i].remove(2)
-                temp_result[i].remove(4)
+                temp_result[i].remove(bos_token)
+                temp_result[i].remove(eos_token)
                 
 
             temp_text.extend(temp_result[0])
             temp_label.extend(temp_result[1])
             word_index.extend([idx] * len(temp_result[0]))
 
-        temp_text.insert(0, 2)
-        temp_text.append(4)
-        temp_label.insert(0, 2)
-        temp_label.append(4)
+        temp_text.insert(0, bos_token)
+        temp_text.append(eos_token)
+        
+        temp_label.insert(0, bos_token)
+        temp_label.append(eos_token)
+        
         word_index.insert(0, 0)
         word_index.append(len(splitted_text) + 1)
 

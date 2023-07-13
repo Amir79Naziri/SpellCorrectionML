@@ -27,6 +27,7 @@ class TestModel:
         main_path="/mnt/disk1/users/naziri",
         model_path="HooshvareLab/bert-base-parsbert-uncased",
         output_file_name="result",
+        mask_token="[MASK]"
     ):
         self.DICTIONARY_DIR = main_path + "/dictionary/dictionary.txt"
         self.KEYBOARD_ERRORS_DIR = (
@@ -44,6 +45,7 @@ class TestModel:
         self.OUTPUT_FILE_DIR = (
             main_path + "/evaluation results/" + output_file_name + ".csv"
         )
+        self.MASK = mask_token
 
         print("creating dictionary ...")
         self.dictionary = self.__create_dictionary()
@@ -208,7 +210,7 @@ class TestModel:
     def __check_sentence(self, sentence, candidate_word):
         tokens = sentence.split()
         ind = tokens.index(candidate_word)
-        tokens[ind] = "[MASK]"
+        tokens[ind] = self.MASK
 
         detect_is_realword = None
 
@@ -294,15 +296,20 @@ if __name__ == "__main__":
     main_path = input("main path: ")
     model_path = input("model path, otherwise for default click space: ")
     output_file_name = input("output file name, otherwise for default click space: ")
+    mask_token = input("mask token, otherwise for default ([MASK]) click space: ")
+    if not mask_token:
+        mask_token = "[MASK]"
+        
     if model_path and output_file_name:
         tm = TestModel(
             main_path=main_path,
             model_path=model_path,
             output_file_name=output_file_name,
+            mask_token=mask_token
         )
     elif model_path:
-        tm = TestModel(main_path=main_path, model_path=model_path)
+        tm = TestModel(main_path=main_path, model_path=model_path, mask_token=mask_token)
     elif output_file_name:
-        tm = TestModel(main_path=main_path, output_file_name=output_file_name)
+        tm = TestModel(main_path=main_path, output_file_name=output_file_name, mask_token=mask_token)
     else:
-        tm = TestModel(main_path=main_path)
+        tm = TestModel(main_path=main_path, mask_token=mask_token)

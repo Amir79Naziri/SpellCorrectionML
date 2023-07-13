@@ -27,7 +27,8 @@ class TestModel:
         main_path="/mnt/disk1/users/naziri",
         model_path="HooshvareLab/bert-base-parsbert-uncased",
         output_file_name="result",
-        mask_token="[MASK]"
+        mask_token="[MASK]",
+        save_model=None
     ):
         self.DICTIONARY_DIR = main_path + "/dictionary/dictionary.txt"
         self.KEYBOARD_ERRORS_DIR = (
@@ -46,7 +47,7 @@ class TestModel:
             main_path + "/evaluation results/" + output_file_name + ".csv"
         )
         self.MASK = mask_token
-
+        
         print("creating dictionary ...")
         self.dictionary = self.__create_dictionary()
 
@@ -57,6 +58,9 @@ class TestModel:
 
         print("load model ...")
         self.model = HappyWordPrediction("BERT", load_path=model_path)
+        
+        if save_model:
+            self.model.save(save_model)
 
         print("evaluation ...")
         self.__evaluate()
@@ -297,19 +301,28 @@ if __name__ == "__main__":
     model_path = input("model path, otherwise for default click space: ")
     output_file_name = input("output file name, otherwise for default click space: ")
     mask_token = input("mask token, otherwise for default ([MASK]) click space: ")
+    save_model = input("save model path (only if load model from url), otherwise click space: ")
+    
     if not mask_token:
         mask_token = "[MASK]"
+    
+    if not save_model:
+        save_model = None
         
     if model_path and output_file_name:
         tm = TestModel(
             main_path=main_path,
             model_path=model_path,
             output_file_name=output_file_name,
-            mask_token=mask_token
+            mask_token=mask_token,
+            save_model=save_model
         )
     elif model_path:
-        tm = TestModel(main_path=main_path, model_path=model_path, mask_token=mask_token)
+        tm = TestModel(main_path=main_path, model_path=model_path, mask_token=mask_token,
+            save_model=save_model)
     elif output_file_name:
-        tm = TestModel(main_path=main_path, output_file_name=output_file_name, mask_token=mask_token)
+        tm = TestModel(main_path=main_path, output_file_name=output_file_name, mask_token=mask_token,
+            save_model=save_model)
     else:
-        tm = TestModel(main_path=main_path, mask_token=mask_token)
+        tm = TestModel(main_path=main_path, mask_token=mask_token,
+            save_model=save_model)

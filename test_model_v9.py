@@ -4,6 +4,7 @@ import pandas as pd
 from tqdm import tqdm
 import os
 import re
+import time
 
 """
 
@@ -324,6 +325,7 @@ if __name__ == "__main__":
         theresholds.append(new_thereshold)
 
     for model in models:
+        f = time.time()
         for th in theresholds:
             print('---------------------', model, '---------------------')
             tm = TestModel(
@@ -333,3 +335,8 @@ if __name__ == "__main__":
                 mask_token=models[model]["mask_toke"],
                 bert_realword_thereshold=float(th),
             )
+        e = time.time()
+        
+        models[model]['time(minutes)'] = (e - f) / (len(theresholds) * 60)
+        
+    print(models)

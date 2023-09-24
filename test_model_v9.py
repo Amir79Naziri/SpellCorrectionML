@@ -327,7 +327,7 @@ if __name__ == "__main__":
     for model in models:
         f = time.time()
         for th in theresholds:
-            print('---------------------', model, '---------------------')
+            print('---------------------', model, theresholds, '---------------------')
             tm = TestModel(
                 main_path=main_path,
                 model_path=model,

@@ -311,7 +311,7 @@ if __name__ == "__main__":
         if query == "q" or query == "Q":
             break
 
-        model, mask_token, output_address = query.split("")
+        model, mask_token, output_address = query.split(" ")
         models[model] = {"mask_token": mask_token, "output_address": output_address}
 
     print("insert new thereshold; otherwise type q: ")

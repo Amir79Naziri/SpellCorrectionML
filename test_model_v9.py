@@ -332,7 +332,7 @@ if __name__ == "__main__":
                 main_path=main_path,
                 model_path=model,
                 output_file_name=models[model]["output_address"] + "_" + th,
-                mask_token=models[model]["mask_toke"],
+                mask_token=models[model]["mask_token"],
                 bert_realword_thereshold=float(th),
             )
         e = time.time()

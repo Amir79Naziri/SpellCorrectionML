@@ -12,7 +12,7 @@ import time
         same as version 7
                
     Real-word:
-        make bert thereshold dynamic -- auto version
+        add choosing evaluation dataset option
     
     Procedure:
         same as version3

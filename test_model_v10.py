@@ -348,5 +348,8 @@ if __name__ == "__main__":
         e = time.time()
         
         models[model]['time(minutes)'] = (e - f) / (len(theresholds) * 60)
-        
+    
+    print()
+    print()
+    print() 
     print(models)

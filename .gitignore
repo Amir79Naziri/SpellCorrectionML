@@ -1,5 +1,13 @@
 .venv/
-data/
-/data/
-*.ipynb
-todo.txt
+.vscode/
+/.vscode/
+data/model
+data/other_data
+data/model
+data/pruned datasets
+data/raw datasets
+data/train test datasets
+data/evaluation results/*.csv
+data/evaluation results/ro*
+data/evaluation results/al*
+data/evaluation results/PowerBI

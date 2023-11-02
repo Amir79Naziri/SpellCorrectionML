@@ -15,6 +15,12 @@ import re
     
     Procedure:
         base on article
+        
+        
+    article: 
+        Y. Hu, X. Jing, Y. Ko, J. T. Rayz, Misspelling correction with pre-trained
+        contextual language model, in: 2020 ieee 19th international conference
+        on cognitive informatics cognitive computing (icci* cc), IEEE, pp. 144–149
     
 """
 

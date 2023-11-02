@@ -1,4 +1,4 @@
-# SpellCorrectionML
+# Advanced Spelling Error Correction in Persian Using BERT: A Comprehensive Approach
 
 Writing, a pervasive form of human communication, permeates nearly every facet of contemporary life. Consequently, any inaccuracies or errors in written communication can have profound consequences, from financial losses to potentially life-threatening situations. Spelling mistakes, one of the most common writing errors, are encountered frequently due to various factors. This research aims to identify and rectify diverse spelling errors in text by harnessing neural networks, particularly the Bidirectional Encoder Representations from Transformers (BERT) masked language model. To achieve this, a comprehensive dataset encompassing both non-real word and real-word errors was compiled after categorizing different types of spelling mistakes. Multiple pre-trained ParsBERT models were subsequently employed.
 

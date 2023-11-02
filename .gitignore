@@ -11,3 +11,4 @@ data/evaluation results/*.csv
 data/evaluation results/ro*
 data/evaluation results/al*
 data/evaluation results/PowerBI
+*.txt

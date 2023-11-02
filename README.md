@@ -5,4 +5,4 @@ Writing, a pervasive form of human communication, permeates nearly every facet o
 To ensure optimal performance in correcting misspelling errors, we proposed a combined approach utilizing the BERT masked language model and Levenshtein distance. The results from our evaluation data demonstrate that the system presented herein exhibits remarkable capabilities in identifying and rectifying spelling mistakes, often outperforming existing systems for the Persian language.
 
 #### Keywords
-Spelling mistakes \sep Neural Networks, BERT masked language model, Error correction system, Real and non-real word errors, ParsBERT model, Levenshtein distance
+Spelling mistakes, Neural Networks, BERT masked language model, Error correction system, Real and non-real word errors, ParsBERT model, Levenshtein distance
